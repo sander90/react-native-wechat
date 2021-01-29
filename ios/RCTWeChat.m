@@ -112,9 +112,12 @@ RCT_EXPORT_METHOD(sendRequest:(NSString *)openid
 {
     BaseReq* req = [[BaseReq alloc] init];
     req.openID = openid;
-    [WXApi sendReq:req completion:^(BOOL success) {
-      callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendReq:req completion:^(BOOL success) {
+          callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
+    
 }
 
 RCT_EXPORT_METHOD(sendAuthRequest:(NSString *)scope
@@ -125,11 +128,14 @@ RCT_EXPORT_METHOD(sendAuthRequest:(NSString *)scope
     req.scope = scope;
     req.state = state;
      UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    [WXApi sendAuthReq:req viewController:rootViewController delegate:self completion:^( BOOL success )
-    {
-        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-        return;
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendAuthReq:req viewController:rootViewController delegate:self completion:^( BOOL success )
+        {
+            callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+            return;
+        }];
+    });
+    
 
 }
 
@@ -137,9 +143,11 @@ RCT_EXPORT_METHOD(sendSuccessResponse:(RCTResponseSenderBlock)callback)
 {
     BaseResp* resp = [[BaseResp alloc] init];
     resp.errCode = WXSuccess;
-    [WXApi sendResp:resp completion:^(BOOL success) {
-      callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendResp:resp completion:^(BOOL success) {
+          callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
 }
 
 RCT_EXPORT_METHOD(sendErrorCommonResponse:(NSString *)message
@@ -148,9 +156,12 @@ RCT_EXPORT_METHOD(sendErrorCommonResponse:(NSString *)message
     BaseResp* resp = [[BaseResp alloc] init];
     resp.errCode = WXErrCodeCommon;
     resp.errStr = message;
-    [WXApi sendResp:resp completion:^(BOOL success) {
-      callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendResp:resp completion:^(BOOL success) {
+          callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
+    
 }
 
 RCT_EXPORT_METHOD(sendErrorUserCancelResponse:(NSString *)message
@@ -159,9 +170,12 @@ RCT_EXPORT_METHOD(sendErrorUserCancelResponse:(NSString *)message
     BaseResp* resp = [[BaseResp alloc] init];
     resp.errCode = WXErrCodeUserCancel;
     resp.errStr = message;
-    [WXApi sendResp:resp completion:^(BOOL success) {
-      callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendResp:resp completion:^(BOOL success) {
+          callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
+    
 }
 
 RCT_EXPORT_METHOD(shareToTimeline:(NSDictionary *)data
@@ -191,9 +205,12 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
     req.timeStamp           = [data[@"timeStamp"] unsignedIntValue];
     req.package             = data[@"package"];
     req.sign                = data[@"sign"];
-    [WXApi sendReq:req completion:^(BOOL success) {
-        callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendReq:req completion:^(BOOL success) {
+            callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
+    
 }
 
 
@@ -338,9 +355,12 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
     req.bText = YES;
     req.scene = aScene;
     req.text = text;
-    [WXApi sendReq:req completion:^(BOOL success) {
-      callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendReq:req completion:^(BOOL success) {
+          callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
+    
 }
 
 - (void)shareToWeixinWithMediaMessage:(int)aScene
@@ -366,9 +386,12 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
     req.bText = NO;
     req.scene = aScene;
     req.message = message;
-    [WXApi sendReq:req completion:^(BOOL success) {
-      callback(@[success ? [NSNull null] : INVOKE_FAILED]);
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [WXApi sendReq:req completion:^(BOOL success) {
+          callback(@[success ? [NSNull null] : INVOKE_FAILED]);
+        }];
+    });
+    
 }
 
 
@@ -432,4 +455,3 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)data
 
 
 @end
-
